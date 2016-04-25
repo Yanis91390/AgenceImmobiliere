@@ -3,6 +3,7 @@ package com.Controlleur;
 
 import com.Model.*;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +16,8 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class Operation {
+public class Operation 
+{
     
 	Connection con = Connexion.getCon();
     
@@ -138,14 +140,31 @@ public class Operation {
      
      public void modifierRendezVous(RendezVous rdv) throws SQLException
      {
-         PreparedStatement psm=con.prepareStatement("update RendezVous set titre=?,contenu=?, dateAjout=?,IDCommercial=? where IDRendezVous=?");
+         PreparedStatement psm=con.prepareStatement("update RendezVous set titre=?,contenu=?,dateAjout=? where IDRendezVous=?");
          psm.setString(1, rdv.getTitre());
          psm.setString(2, rdv.getContenu());
          psm.setString(3, rdv.getDateAjout());
-         psm.setString(4, rdv.getIDCommercial());
-         psm.setString(5, rdv.getIdRendezVous());
+         psm.setString(4, rdv.getIdRendezVous());
      
          psm.executeUpdate();
-     }
-    
-}
+         
+         System.out.println("Méthode appliqué");
+     } 
+     
+     public RendezVous getRendezVous(String id)throws SQLException
+     {
+         RendezVous n=null;
+         ResultSet rs=con.createStatement().executeQuery("select IDRendezVous,titre,contenu,DATEAJOUT from RendezVous where IDRendezVous="+id );
+         
+         if(rs.next())
+         {
+        	 n=new RendezVous(rs.getInt(1)+"", rs.getString(2), rs.getString(3), rs.getObject(4)+"");
+         }
+         
+      return n;
+      
+     } 
+       
+       
+   }
+      

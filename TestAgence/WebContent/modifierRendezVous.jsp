@@ -6,7 +6,7 @@
 <%
 Operation op =new Operation();
 /*Note not1 =op.getNote(request.getParameter("n"));*/
-/*RendezVous not1 = op.getRendezVous(request.getParameter("n"))*/
+RendezVous rendezvous = op.getRendezVous(request.getParameter("n"));
 
 
 %>
@@ -18,9 +18,11 @@ Operation op =new Operation();
 </head>
 <body>
 	<form action = "Controler/ModifierRendezVous" method="post"> 
-		titre <input type="text" name="pass"></br>
-		contenue : <input type="text" name="email"></br>
-		Date Ajout : <input type="text" name="question"></br>
+		<td><input type="hidden" name="idrdv" value="<%=rendezvous.getIdRendezVous()%>" size="30" /></td>
+		Id rdv : <input type="text" name="id" value="<%=rendezvous.getIdRendezVous()%>" size="30"></br>
+		titre <input type="text" name="titre1" value="<%=rendezvous.getTitre()%>" size="30"></br>
+		contenue : <input type="text" name="contenu1"></br>
+		Date Ajout : <input type="text" name="dateAjout1"></br>
 		<input type="submit" value="confirmer" name="btnmodifierdv">
 	</form>
 

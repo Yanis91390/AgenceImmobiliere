@@ -72,13 +72,15 @@ public class Controler extends HttpServlet
 	        	ajouterCommercial(request,response);
 	        }
 	        
+	        if(action.equals("/ModifierRendezVous") && method.toLowerCase().equals("post"))
+	        {
+	        	/*Faire la méthode de mofication*/
+	        	modifierRendezVous(request,response);
+	        }
 	        
-		 
+	        		 
 	  }
 
-
-
-	
 
 	private void SeConnecter(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException 
@@ -125,6 +127,7 @@ public class Controler extends HttpServlet
 		
 	}
 	
+	/*--------------------------BIEN IMMOBILIER----------------------------------*/
 	protected void ajouterBienImmobilier(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
 	{
@@ -155,6 +158,7 @@ public class Controler extends HttpServlet
      
     }
 	
+	/*-------------------------- COMMERCIAL ----------------------------------*/
 	private void ajouterCommercial(HttpServletRequest request, HttpServletResponse response) 
 		throws ServletException, IOException 
 	{
@@ -183,6 +187,40 @@ public class Controler extends HttpServlet
 			System.out.println("ERREUUUUUUUUUUUUUUUUUUR" +e.getMessage() + e.toString() + e.getLocalizedMessage());
 			response.sendRedirect("../formulaireInscription.jsp");
 		}
+		
+	}
+	
+	/*-------------------------- RENDEZ-VOUS ----------------------------------*/
+	private void modifierRendezVous(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException 
+	{
+		String idrdv= request.getParameter("idrdv");
+		String titre = request.getParameter("titre1");
+		String contenu = request.getParameter("contenu1");
+		String dateAjout = request.getParameter("dateAjout1");
+		
+		RendezVous rdv = new RendezVous();
+		rdv.setIdRendezVous(idrdv);
+		rdv.setTitre(titre);
+		rdv.setContenu(contenu);
+		rdv.setDateAjout(dateAjout);
+		
+		try
+		{
+			op.modifierRendezVous(rdv);
+			System.out.println("SUCCEEEEEEEEEEEEES");
+			request.getSession().setAttribute("n1", "<span style=\"color:green\">Modification avec Succes</span>");
+			response.sendRedirect("../Accueil.jsp");
+		
+		}
+		
+		catch (SQLException ex) 
+		{
+          response.sendRedirect("../Accueil.jsp");
+          System.out.println("ERREUUUUUUUUUUUUUUUUUUUUUUR");
+          request.getSession().setAttribute("n1", "<span style=\"color:red\">"+ex.getMessage()+"</span>");
+		}
+		
 		
 	}
 }
