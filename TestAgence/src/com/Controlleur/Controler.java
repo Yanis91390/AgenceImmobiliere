@@ -50,8 +50,6 @@ public class Controler extends HttpServlet
 	        if(action.equals("/SeConnecter") && method.toLowerCase().equals("post"))
 	        {
 	            SeConnecter(request, response);
-	            System.out.println("CLIQUE SUR LE BOUTON VALIDER");
-	            System.out.println("Changement de vue");
 	        }
 	        
 	        if(action.equals("/AjouterBien") && method.toLowerCase().equals("post"))
@@ -94,19 +92,20 @@ public class Controler extends HttpServlet
         commercial.setPassword(pass);
         //ArrayList<Note> list=new ArrayList<Note>();
         Administrateur administrateur = new Administrateur();
-        
+        administrateur.setCommercial(administrateur.getCommercial());
         
         try{
             if(op.isExiste(commercial)){
                
                 request.getSession().setAttribute("commercial", commercial);
+                
                 request.getSession().setAttribute("administrateur", administrateur);
-                administrateur.setCommercial(administrateur.getCommercial());
+                
                 request.getSession().setAttribute("rep", null);
                 //session2.setAttribute(arg0, arg1);
                 //response.sendRedirect("../vuePrincipale.jsp");
                 
-                response.sendRedirect("../vueCommerciaux.jsp"); 
+                response.sendRedirect("../Accueil.jsp"); 
                 //response.sendRedirect("../vueTest.jsp"); 
                 //response.sendRedirect("../formulaireInscription.jsp"); 
                 //request.getSession().setAttribute("list", list);

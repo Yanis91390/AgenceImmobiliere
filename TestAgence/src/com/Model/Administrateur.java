@@ -15,7 +15,9 @@ public class Administrateur
 	
 	public Administrateur()
 	{
-		this.liste_commercial = getCommercial();
+		//this.liste_commercial = getCommercial();
+		//liste_commercial.add(c1);
+		//liste_commercial.add(c2);
 		
 	}
 	
@@ -25,13 +27,13 @@ public class Administrateur
 		
 		try 
         { 
-            java.sql.ResultSet rs=Connexion.getCon().createStatement().executeQuery("select Login,Password ,Email,QuestionSecret,ReponseSecret from Commercial");
+            java.sql.ResultSet rs=Connexion.getCon().createStatement().executeQuery("select IDCommercial, Login,Password ,Email,QuestionSecret,ReponseSecret from Commercial");
              
             
             while(rs.next())
             {
-                 list.add(new Commercial(rs.getString(1)+"", rs.getString(2), rs.getString(3),rs.getString(4),rs.getString(5)));
-                 System.out.println("" + list);
+                 list.add(new Commercial(rs.getString(1)+"", rs.getString(2), rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6)));
+                 System.out.println(list.size());
             }
         
         } catch (SQLException ex) {
