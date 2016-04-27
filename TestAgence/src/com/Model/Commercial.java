@@ -8,12 +8,12 @@ import java.util.logging.Logger;
 public class Commercial 
 {
 		private int IDCommercial;
+		private String IdCommercial;
 		private String Login =""  ;
 		private String password="";
 		private String email  =""  ;
 		private String QuesSecret  ="";
 		private String RepSecret  ="" ;
-		//private ArrayList<Note> n=new ArrayList<Note>();
 		private ArrayList<BienImmobilier> liste_bienImmobilier = new ArrayList<BienImmobilier>();
 		private ArrayList<RendezVous> liste_rendezVous = new ArrayList<RendezVous>();
 		private int nbRendezVous;
@@ -26,13 +26,13 @@ public class Commercial
 	    
 
 	    public Commercial(String Login, String password, String email, String QuesSecret, String RepSecret) {
-	        this.IDCommercial=getIDCommercial(Login); //+"";
+	        //this.IDCommercial=getIDCommercial(Login); //+"";
 	        this.Login = Login;
 	        this.password = password;
 	        this.email = email;
 	        this.QuesSecret = QuesSecret;
 	        this.RepSecret = RepSecret;
-	        this.liste_rendezVous=getRendezVous(Login);
+	        //this.liste_rendezVous=getRendezVous(Login);
 	        this.liste_bienImmobilier=getBienImmobiliers();
 	        //this.n=getNote(Login);
 	        //nbrNote=getNbrNote(Login);
@@ -50,7 +50,25 @@ public class Commercial
 	        //nbrNote= getNbrNote(Login);
 	    }
 
-	    public int getIDCommercial() {
+	    public Commercial(String IdCommercial, String Login, String password, String email, String QuesSecret, String RepSecret) 
+	    {
+	    	//this.IdCommercial
+	    	this.Login = Login;
+	        this.password = password;
+	        this.email = email;
+	        this.QuesSecret = QuesSecret;
+	        this.RepSecret = RepSecret;
+	        //this.liste_rendezVous=getRendezVous(Login);
+	        //this.liste_bienImmobilier=getBienImmobiliers();
+	        //this.n=getNote(Login);
+	        //nbrNote=getNbrNote(Login);
+		}
+
+
+	
+
+
+		public int getIDCommercial() {
 	        return IDCommercial;
 	    }
 
