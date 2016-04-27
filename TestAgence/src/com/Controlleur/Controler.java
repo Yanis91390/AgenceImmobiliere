@@ -93,16 +93,20 @@ public class Controler extends HttpServlet
         commercial.setLogin(login);
         commercial.setPassword(pass);
         //ArrayList<Note> list=new ArrayList<Note>();
+        Administrateur administrateur = new Administrateur();
+        
         
         try{
             if(op.isExiste(commercial)){
                
                 request.getSession().setAttribute("commercial", commercial);
+                request.getSession().setAttribute("administrateur", administrateur);
+                administrateur.setCommercial(administrateur.getCommercial());
                 request.getSession().setAttribute("rep", null);
                 //session2.setAttribute(arg0, arg1);
                 //response.sendRedirect("../vuePrincipale.jsp");
                 
-                response.sendRedirect("../Accueil.jsp"); 
+                response.sendRedirect("../vueCommerciaux.jsp"); 
                 //response.sendRedirect("../vueTest.jsp"); 
                 //response.sendRedirect("../formulaireInscription.jsp"); 
                 //request.getSession().setAttribute("list", list);

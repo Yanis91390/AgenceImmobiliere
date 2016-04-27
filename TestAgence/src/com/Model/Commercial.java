@@ -15,7 +15,7 @@ public class Commercial
 		private String RepSecret  ="" ;
 		//private ArrayList<Note> n=new ArrayList<Note>();
 		private ArrayList<BienImmobilier> liste_bienImmobilier = new ArrayList<BienImmobilier>();
-		private ArrayList<RendezVous> liste_rendezVous =new ArrayList<RendezVous>();
+		private ArrayList<RendezVous> liste_rendezVous = new ArrayList<RendezVous>();
 		private int nbRendezVous;
 		private int nbrNote=0;
 
@@ -134,12 +134,12 @@ public class Commercial
 	        ArrayList<RendezVous> list=new ArrayList<RendezVous> ();
 	        try 
 	        { 
-	            java.sql.ResultSet rs=Connexion.getCon().createStatement().executeQuery("select IDRendezVous,titre ,contenu ,dateAjout, IDBienImmobilier from RendezVous where IDCommercial in (select IDCommercial from Commercial where login='"+login+"')");
+	            java.sql.ResultSet rs=Connexion.getCon().createStatement().executeQuery("select IDRendezVous,titre ,contenu ,dateAjout from RendezVous where IDCommercial in (select IDCommercial from Commercial where login='"+login+"')");
 	             
 	            
 	            while(rs.next())
 	            {
-	                 list.add(new RendezVous(rs.getInt(1)+"", rs.getString(2), rs.getString(3), rs.getObject(4)+"" , rs.getInt(5)+""));  
+	                 list.add(new RendezVous(rs.getInt(1)+"", rs.getString(2), rs.getString(3), rs.getObject(4)+""));  
 	            }
 	        
 	        } catch (SQLException ex) {

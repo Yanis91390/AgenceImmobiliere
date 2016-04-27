@@ -6,10 +6,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author YOUNES
- */
 public class Connexion {
     public static Connection getCon(){
         

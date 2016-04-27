@@ -40,6 +40,8 @@
 </head>
 <body>
 
+	<%@include file="menu.jsp" %>
+
 	<h2>Ajouter un bien</h2>
 	<div style="display: inline-block;margin-left:10%;margin-top: 2%;width: 80%">
             <%=not%>

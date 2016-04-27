@@ -17,6 +17,9 @@ RendezVous rendezvous = op.getRendezVous(request.getParameter("n"));
 <title>Insert title here</title>
 </head>
 <body>
+		
+		<%@include file="menu.jsp" %>
+
 	<form action = "Controler/ModifierRendezVous" method="post"> 
 		<td><input type="hidden" name="idrdv" value="<%=rendezvous.getIdRendezVous()%>" size="30" /></td>
 		Id rdv : <input type="text" name="id" value="<%=rendezvous.getIdRendezVous()%>" size="30"></br>

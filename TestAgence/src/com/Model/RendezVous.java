@@ -27,6 +27,14 @@ public class RendezVous
 	        this.IDBienImmobilier = IDBienImmobilier;
 	      
 	    }
+	 
+	 public RendezVous(String idRendezVous, String titre, String contenu, String dateAjout) 
+	 {
+	        this.idRendezVous = idRendezVous;
+	        this.titre = titre;
+	        this.contenu = contenu;
+	        this.dateAjout = dateAjout;  
+	 }
 
 	    public String getIdRendezVous() {
 	        return idRendezVous;

@@ -31,6 +31,9 @@
 <title>Accueil</title>
 </head>
 		<body>
+		
+		<%@include file="menu.jsp" %>
+            
 			<div style="display: inline-block;margin-left:10%;margin-top: 2%;width: 80%">
             <%=not%>
             <table border="1" style="width: 100%">
@@ -46,7 +49,7 @@
                     <td><%=commercial.getRendezVous().get(i).getContenu()%></td>
                     <td><%=commercial.getRendezVous().get(i).getDateAjout()%></td>
                     <td>
-                        <form action="modf.jsp">
+                        <form action="modifierRendezVous.jsp">
                             <input type="hidden" name="n" value="<%=commercial.getRendezVous().get(i).getIdRendezVous()%>" />
                             <input type="submit" value="Modifier" />
                         </form>
