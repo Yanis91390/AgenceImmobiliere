@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-public class Operation 
+public class Operation implements BienImmobilierDAO
 {
     
 	Connection con = Connexion.getCon();
@@ -89,11 +89,16 @@ public class Operation
      /*Ajoute un BienImmobilier dans la base de données*/
      public void addBienImmobilier(BienImmobilier bien) throws SQLException
      {
-    	 PreparedStatement psm = con.prepareStatement("insert into BienImmobilier(IDBienImmobilier,nomBienImmobilier) values(?,?)");
-    	 //psm.setString(1, bien.getNomBienImmobilier());
-    	 //psm.setString(2, id);
-    	 psm.setString(1, bien.getIDBienImmobilier());
-    	 psm.setString(2, "Maison");
+    	 PreparedStatement psm = con.prepareStatement("insert into BienImmobilier(TypeBien,DisponibleBien,StatutBien,EtatBien,PrixBien,LoyerBien,ChargeBien,AdresseBien,SuperficieBien) values(?,?,?,?,?,?,?,?,?)");
+    	 psm.setString(1, bien.getTypeBien()+"");
+    	 psm.setBoolean(2, bien.isDisponible());
+    	 psm.setString(3, bien.getStatutBien().toString());
+    	 psm.setString(4, bien.getEtatBien().toString());
+    	 psm.setDouble(5, bien.getPrixAchat());
+    	 psm.setDouble(6, bien.getLoyer());
+    	 psm.setDouble(7, bien.getCharge());
+    	 psm.setString(8, bien.getAdresse());
+    	 psm.setInt(9, bien.getSuperficie());
 
     	 psm.executeUpdate();
      }
@@ -111,12 +116,17 @@ public class Operation
          
          psm.executeUpdate();
          
-        /* String SQL = "insert into utilisateur1 (seq_ut.nextval,?,?,?,?,?) ";
-
- 		jdbcTemplateObject.update(SQL, name, age);
- 		System.out.println("Created Record Name = " + name + " Age = " + age);
- 		return;*/
-         
+     }
+     
+     public void addRendezVous(RendezVous rdv) throws SQLException
+     {
+    	 PreparedStatement psm=con.prepareStatement("insert into RendezVous (titre,contenu,dateAjout,IDCommercial) values (?,?,?,?)");
+    	 psm.setString(1, rdv.getTitre());
+    	 psm.setString(2, rdv.getContenu());
+    	 psm.setString(3, rdv.getDateAjout());
+    	 psm.setInt(4, rdv.getIDCommercial());
+    	 
+    	 psm.executeUpdate();
      }
      
      /*----------------------------METHODE DE SUPRESSION-------------------------------------*/
@@ -125,15 +135,24 @@ public class Operation
      public void deleteBienImmobilier(BienImmobilier bien) throws SQLException
      {
     	 PreparedStatement psm = con.prepareStatement("Delete from BienImmobilier where IDBienImmobilier=?");
-    	 psm.setString(1, bien.getIDBienImmobilier());
+    	 psm.setInt(1, bien.getIDBienImmobilier());
     	 psm.executeUpdate();
     	 
      }
      
      /*Supprimer un Commercial de la Base de données*/
-     public void deleteCommercial(Commercial commercial)
+     public void deleteCommercial(Commercial commercial) throws SQLException
      {
-    	 
+    	 PreparedStatement psm = con.prepareStatement("Delete from Commercial where IDCommercial=?");
+    	 psm.setInt(1, commercial.getIDCommercial()); //Peut être va t il falloir changer l'attribut IDCommercial en String
+    	 psm.executeUpdate();
+     }
+     
+     public void deleteRendezVous(RendezVous rdv) throws SQLException
+     {
+    	 PreparedStatement psm = con.prepareStatement("Delete from RendezVous where IDRendezVous=?");
+    	 psm.setInt(1, rdv.getIdRendezVous());
+    	 psm.executeUpdate();
      }
      
      /*----------------------------METHODE DE MODIFICATION-------------------------------------*/
@@ -144,12 +163,31 @@ public class Operation
          psm.setString(1, rdv.getTitre());
          psm.setString(2, rdv.getContenu());
          psm.setString(3, rdv.getDateAjout());
-         psm.setString(4, rdv.getIdRendezVous());
+         psm.setInt(4, rdv.getIdRendezVous());
      
          psm.executeUpdate();
          
-         System.out.println("Méthode appliqué");
+         System.out.println("Méthode appliqué modifier Rendez Vous");
      } 
+     
+     public void modifierBienImmobilier(BienImmobilier bien) throws SQLException
+     {
+    	 PreparedStatement psm=con.prepareStatement("update BienImmobilier set TypeBien=?,DisponibleBien=?,StatutBien=?,EtatBien=?,PrixBien=?,LoyerBien=?,ChargeBien=?,AdresseBien=?,SuperficieBien=? where IDBienImmobilier=?");
+    	 psm.setString(1, bien.getTypeBien().toString());
+    	 psm.setBoolean(2, bien.isDisponible());
+    	 psm.setString(3, bien.getStatutBien().toString());
+    	 psm.setString(4, bien.getEtatBien().toString());
+    	 psm.setDouble(5, bien.getPrixAchat());
+    	 psm.setDouble(6, bien.getLoyer());
+    	 psm.setDouble(7, bien.getCharge());
+    	 psm.setString(8, bien.getAdresse());
+    	 psm.setInt(9, bien.getSuperficie());
+    	 psm.setInt(10, bien.getIDBienImmobilier());
+     
+         psm.executeUpdate();
+         
+         System.out.println("Méthode appliqué modifier BienImmo" + bien.getIDBienImmobilier());
+     }
      
      public RendezVous getRendezVous(String id)throws SQLException
      {
@@ -158,12 +196,73 @@ public class Operation
          
          if(rs.next())
          {
-        	 n=new RendezVous(rs.getInt(1)+"", rs.getString(2), rs.getString(3), rs.getObject(4)+"");
+        	 n=new RendezVous(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getObject(4)+"");
+        	 //rs.getInt(1)+""
          }
          
       return n;
       
      } 
+     
+     public BienImmobilier getBienImmobiliers(String id)throws SQLException
+     {
+         BienImmobilier n=null;
+         ResultSet rs=con.createStatement().executeQuery("select * from BienImmobilier where IDBienImmobilier="+id );
+         
+         if(rs.next())
+         {
+        	 n=new BienImmobilier(rs.getInt(1), rs.getString(2), rs.getBoolean(3), rs.getString(4)
+            		 , rs.getString(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getString(9) ,rs.getInt(10)); 
+         }
+         
+      return n;
+      
+     }
+
+	public void genererListeClient() throws SQLException
+	{
+		
+		
+	}
+
+	
+	public void addBII(TypeBien t, boolean d, StatutBien s, EtatBien e, double p, double l, double c, String a,
+			int sup) {
+		
+		String SQL = "insert into BienImmobilier(TypeBien,DisponibleBien,StatutBien,EtatBien,PrixBien,LoyerBien,ChargeBien,AdresseBien,SuperficieBien) values(?,?,?,?,?,?,?,?,?)";
+
+		//jdbcTemplateObject.update(SQL, name, age);
+		jdbcTemplateObject.update(SQL , t,d,s,e,p,l,c,a,sup);
+		
+	}
+
+	@Override
+	public void deleteBI(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateBI(Integer id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	/*Classe Operation, utilisation de l'objet jdbcTemplateObject de Spring*/
+	public void addBI(BienImmobilier b) 
+	{
+		String SQL = "insert into BienImmobilier(TypeBien,DisponibleBien,StatutBien,EtatBien,PrixBien,LoyerBien,"
+				+ "ChargeBien,AdresseBien,SuperficieBien) values(?,?,?,?,?,?,?,?,?)";
+
+		jdbcTemplateObject.update(SQL , b.getTypeBien().toString(),
+				b.isDisponible(),b.getStatutBien().toString(),
+				b.getEtatBien().toString(),b.getPrixAchat(),b.getLoyer(),b.getCharge(),
+				b.getAdresse(),b.getSuperficie());
+		
+	}
+
+	
        
        
    }

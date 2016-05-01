@@ -1,20 +1,27 @@
 package com.Controlleur;
 
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import com.Model.*;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Controler extends HttpServlet 
 {
-	 Operation op =new Operation();
+	 //Operation op =new Operation();
+	ApplicationContext context = 
+				new ClassPathXmlApplicationContext("Beans.xml");
+	Operation op = (Operation) context.getBean("operation");
+	
+	public Commercial commercial;
 	
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException 
@@ -55,25 +62,58 @@ public class Controler extends HttpServlet
 	        if(action.equals("/AjouterBien") && method.toLowerCase().equals("post"))
 	        {
 	        	ajouterBienImmobilier(request, response);
-	        	System.out.println("Ajouter un bien");
 	        }
-	        
+	        //----------------------------A FAIRE
 	        if(action.equals("/SupprimerBien") && method.toLowerCase().equals("post"))
 	        {
-	        	//ajouterBienImmobilier(request, response);
-	        	//System.out.println("Ajouter un bien");
+	        	supprimerBienImmobilier(request, response);
 	        }
 	        
+	        if(action.equals("/ModifierBien") && method.toLowerCase().equals("post"))
+	        {
+	        	modifierBienImmobilier(request, response);
+	        }
 	        
-	        if(action.equals("/InscriptionCommercial") && method.toLowerCase().equals("post"))
+	        if(action.equals("/GenererListeClient") && method.toLowerCase().equals("post"))
+	        {
+	        	genererListeClient(request, response);
+	        }     
+	   
+	        if(action.equals("/AjouterCommercial") && method.toLowerCase().equals("post"))
 	        {
 	        	ajouterCommercial(request,response);
 	        }
 	        
+	        // A FAAAAAAAAIREEEEEEEEEEEEEEEEE
+	        if(action.equals("/SupprimerCommercial") && method.toLowerCase().equals("post"))
+	        {
+	        	
+	        }
+	        
+	        // A FAAAAAAAAAAAAAAAAAAIREEEEEEEEEEEEEEEEEEEE
+	        if(action.equals("/ModifierCommercial") && method.toLowerCase().equals("post"))
+	        {
+	        	
+	        }
+	        
+	        if(action.equals("/AjouterRendezVous") && method.toLowerCase().equals("post"))
+	        {
+	        	ajouterRendezVous(request,response);
+	        }
+	        
 	        if(action.equals("/ModifierRendezVous") && method.toLowerCase().equals("post"))
 	        {
-	        	/*Faire la méthode de mofication*/
 	        	modifierRendezVous(request,response);
+	        }
+	        
+	        if(action.equals("/SupprimerRendezVous") && method.toLowerCase().equals("post"))
+	        {
+	        	try {
+					supprimerRendezVous(request, response);
+				} catch (SQLException e) {
+					System.out.println("ERREUR ZEEEEEEEEEEEEEER");
+					e.printStackTrace();
+				}
 	        }
 	        
 	        		 
@@ -87,10 +127,9 @@ public class Controler extends HttpServlet
 		//HttpSession session2 = request.getSession();
         String login =request.getParameter("login");
         String pass =request.getParameter("pass");
-        Commercial commercial =new Commercial();
+        commercial =new Commercial();
         commercial.setLogin(login);
         commercial.setPassword(pass);
-        //ArrayList<Note> list=new ArrayList<Note>();
         Administrateur administrateur = new Administrateur();
         administrateur.setCommercial(administrateur.getCommercial());
         
@@ -103,18 +142,16 @@ public class Controler extends HttpServlet
                 
                 request.getSession().setAttribute("rep", null);
                 //session2.setAttribute(arg0, arg1);
-                //response.sendRedirect("../vuePrincipale.jsp");
                 
                 response.sendRedirect("../Accueil.jsp"); 
-                //response.sendRedirect("../vueTest.jsp"); 
-                //response.sendRedirect("../formulaireInscription.jsp"); 
-                //request.getSession().setAttribute("list", list);
+               
                 
             }else{
-                 response.sendRedirect("../Connexion.jsp");
+                 
+            	 response.sendRedirect("../Connexion.jsp");
                  request.getSession().setAttribute("commercial", commercial);
                  request.getSession().setAttribute("rep", "Utilisateur ou mot de pass incorect");
-                 //request.getSession().setAttribute("list", list);
+                 
             }
             
             
@@ -136,30 +173,112 @@ public class Controler extends HttpServlet
 	{
              processRequest(request, response);
              
-              String titre=request.getParameter("ajouterBienImmobilier");
-              //String contenu=request.getParameter("contenu");
-              Commercial commercial =(Commercial) request.getSession().getAttribute("commercial");
-              BienImmobilier bien =new BienImmobilier();
-              ArrayList<BienImmobilier> list =(ArrayList<BienImmobilier>)request.getSession().getAttribute("list");
-             // n.setNomBienImmobilier(nom);(titre);
-              //n.setContenu(contenu);
+           //Commercial commercial =(Commercial) request.getSession().getAttribute("commercial");
+             //ArrayList<BienImmobilier> list =(ArrayList<BienImmobilier>)request.getSession().getAttribute("list")
               
+             String type =request.getParameter("typebien");
+              String disponible = request.getParameter("disponible");
+      	      String statut = request.getParameter("statutbien");
+      		  String etat = request.getParameter("etatbien");
+      		  String prix = request.getParameter("prixbien");
+      		  String loyer = request.getParameter("loyerbien");
+      		  String charge = request.getParameter("chargebien");
+      		  String adresse = request.getParameter("adressebien");
+      		  String superficie = request.getParameter("superficiebien");
+      		  
+      		  BienImmobilier bien = new BienImmobilier();
+    		  bien.setTypeBien(TypeBien.valueOf(type));
+    		  bien.setDisponible(Boolean.valueOf(disponible));
+    		  bien.setStatutBien(StatutBien.valueOf(statut));
+    		  bien.setEtatBien(EtatBien.valueOf(etat));
+    		  bien.setPrixAchat(Double.valueOf(prix));
+    		  bien.setLoyer(Double.valueOf(loyer));
+    		  bien.setCharge(Double.valueOf(charge));
+    		  bien.setAdresse(adresse);
+    		  bien.setSuperficie(Integer.valueOf(superficie));
               
-            try {
-              request.getSession().setAttribute("not", "<span style=\"color:green\">Succes</span>");
-              op.addBienImmobilier(bien);
-              //op.addBienImmobilier(bien, commercial.getIDCommercial());//??????
-              //list.add(bien);
-              response.sendRedirect("../vueTest.jsp");
-         } catch (SQLException ex) {
-             response.sendRedirect("../vuePrincipale.jsp");
-            request.getSession().setAttribute("not", "<span style=\"color:red\">"+ex.getMessage()+"</span>");
-            System.out.println(ex.getErrorCode()+" " + ex.getSQLState()+" " +ex.getMessage());
-         }
-             
-      
-     
+            try 
+            {
+            	
+            	op.addBI(bien);
+            	//request.getSession().setAttribute("not", "<span style=\"color:green\">Succes</span>");
+               	//op.addBienImmobilier(bien);
+              	response.sendRedirect("../vueBienImmobilier.jsp");
+            } 
+            
+            catch (Exception ex) 
+            {
+            	response.sendRedirect("../vueBienImmobilier.jsp");
+            	request.getSession().setAttribute("not", "<span style=\"color:red\">"+ex.getMessage()+"</span>");
+            	//System.out.println(ex.getErrorCode()+" " + ex.getSQLState()+" " +ex.getMessage());
+            }
+              
     }
+	
+	private void modifierBienImmobilier(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException  
+	{
+		processRequest(request, response);
+		
+		String idbien = request.getParameter("id");
+		String type = request.getParameter("type");
+		String disponible = request.getParameter("disponible");
+		String statut = request.getParameter("statut");
+		String etat = request.getParameter("etat");
+		String prix = request.getParameter("prix");
+		String loyer = request.getParameter("loyer");
+		String charge = request.getParameter("charge");
+		String adresse = request.getParameter("adresse");
+		String superficie = request.getParameter("superficie");
+		
+		BienImmobilier bien = new BienImmobilier();
+		bien.setIDBienImmobilier(strToInt(idbien));
+		bien.setTypeBien(TypeBien.valueOf(type));
+		bien.setDisponible(Boolean.valueOf(disponible));
+		bien.setStatutBien(StatutBien.valueOf(statut));
+		bien.setEtatBien(EtatBien.valueOf(etat));
+		bien.setPrixAchat(Double.valueOf(prix));
+		bien.setLoyer(Double.valueOf(loyer));
+		bien.setCharge(Double.valueOf(charge));
+		bien.setAdresse(adresse);
+		bien.setSuperficie(Integer.valueOf(superficie));
+		
+		try
+		{
+			op.modifierBienImmobilier(bien);
+			response.sendRedirect("../vueBienImmobilier.jsp");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			response.sendRedirect("../vueBienImmobilier.jsp");
+		}
+		
+	}
+	
+	private void supprimerBienImmobilier(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException  
+	{
+		
+		
+	}
+	
+	private void genererListeClient(HttpServletRequest request, HttpServletResponse response) {
+		
+		try
+		{
+			op.genererListeClient();
+		}
+		
+		catch(SQLException ex)
+		{
+			
+		}
+		
+	}
+
+	
+	
 	
 	/*-------------------------- COMMERCIAL ----------------------------------*/
 	private void ajouterCommercial(HttpServletRequest request, HttpServletResponse response) 
@@ -183,7 +302,8 @@ public class Controler extends HttpServlet
 		try
 		{
 			op.addCommercial(commercial);
-			response.sendRedirect("../formulaireInscription.jsp");
+			response.sendRedirect("../vueCommerciaux.jsp");
+			request.getSession().setAttribute("not", "<span style=\"color:green\">Succes</span>");
 		}
 		catch(Exception e)
 		{
@@ -194,16 +314,58 @@ public class Controler extends HttpServlet
 	}
 	
 	/*-------------------------- RENDEZ-VOUS ----------------------------------*/
+	/*Fonctionne*/
+	private void ajouterRendezVous(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException
+	{
+		processRequest(request, response);
+		
+		//Commercial commercialConnecte = (Commercial) request.getSession().getAttribute("commercial");
+		
+		//commercialConnecte.getIDCommercial(commercialConnecte.getLogin());
+		
+		commercial = (Commercial) request.getSession().getAttribute("commercial");
+		int id = commercial.getIDCommercial(commercial.getLogin());
+		
+		String titre = request.getParameter("titre");
+		String contenu = request.getParameter("contenu");
+		String dateAjout = request.getParameter("dateAjout");
+		
+		RendezVous rdv = new RendezVous();
+		rdv.setIDCommercial(id);
+		rdv.setTitre(titre);
+		rdv.setDateAjout(dateAjout);
+		rdv.setContenu(contenu);
+		
+		try
+		{
+			op.addRendezVous(rdv);
+			response.sendRedirect("../Accueil.jsp");
+			request.getSession().setAttribute("not", "<span style=\"color:green\">Succes</span>");
+			System.out.println("Succes");
+		}
+		
+		catch (Exception e)
+		{
+			System.out.println("ERREUUUUUUUUUUUUUUUUUUR" +e.getMessage() + e.toString() + e.getLocalizedMessage());
+			response.sendRedirect("../Accueil.jsp");
+		}
+	}
+	
+	/*Fonctionne*/
 	private void modifierRendezVous(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException 
 	{
+		
+		
 		String idrdv= request.getParameter("idrdv");
+		
 		String titre = request.getParameter("titre1");
 		String contenu = request.getParameter("contenu1");
 		String dateAjout = request.getParameter("dateAjout1");
 		
 		RendezVous rdv = new RendezVous();
-		rdv.setIdRendezVous(idrdv);
+		rdv.setIdRendezVous(strToInt(idrdv));
 		rdv.setTitre(titre);
 		rdv.setContenu(contenu);
 		rdv.setDateAjout(dateAjout);
@@ -211,7 +373,7 @@ public class Controler extends HttpServlet
 		try
 		{
 			op.modifierRendezVous(rdv);
-			System.out.println("SUCCEEEEEEEEEEEEES");
+			System.out.println("SUCCES MODIFIER RENDEZ VOUS");
 			request.getSession().setAttribute("n1", "<span style=\"color:green\">Modification avec Succes</span>");
 			response.sendRedirect("../Accueil.jsp");
 		
@@ -220,10 +382,41 @@ public class Controler extends HttpServlet
 		catch (SQLException ex) 
 		{
           response.sendRedirect("../Accueil.jsp");
-          System.out.println("ERREUUUUUUUUUUUUUUUUUUUUUUR");
+          System.out.println("ERREUR MODIFIER RENDEZ VOUS");
           request.getSession().setAttribute("n1", "<span style=\"color:red\">"+ex.getMessage()+"</span>");
 		}
 		
 		
+	}
+	
+	/*Fonctionne*/
+	private void supprimerRendezVous(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException, SQLException
+	{
+		try{
+			RendezVous rendezvous = op.getRendezVous(request.getParameter("n"));
+			op.deleteRendezVous(rendezvous);
+			response.sendRedirect("../Accueil.jsp");
+		}
+		
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	/*----------------------------------AUTRE---------------------------------------------*/
+	public static int strToInt(String s)
+	{
+		Integer ger = new Integer(s);
+		int i = ger.intValue();
+		return i;
+	}
+	
+	public static String intToStr(int i)
+	{
+	String texte = new String();
+	texte = texte.valueOf(i);
+	return texte;
 	}
 }

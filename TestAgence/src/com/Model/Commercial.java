@@ -21,7 +21,7 @@ public class Commercial
 
 	    public Commercial() 
 	    {
-	    	
+	    	this.liste_bienImmobilier=getBienImmobiliers();
 		}
 	    
 
@@ -59,7 +59,7 @@ public class Commercial
 	        this.QuesSecret = QuesSecret;
 	        this.RepSecret = RepSecret;
 	        //this.liste_rendezVous=getRendezVous(Login);
-	        //this.liste_bienImmobilier=getBienImmobiliers();
+	        this.liste_bienImmobilier=getBienImmobiliers();
 	        //this.n=getNote(Login);
 	        //nbrNote=getNbrNote(Login);
 		}
@@ -157,7 +157,8 @@ public class Commercial
 	            
 	            while(rs.next())
 	            {
-	                 list.add(new RendezVous(rs.getInt(1)+"", rs.getString(2), rs.getString(3), rs.getObject(4)+""));  
+	                 list.add(new RendezVous(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getObject(4)+""));  
+	                 //rs.getInt(1)+""
 	            }
 	        
 	        } catch (SQLException ex) {
@@ -170,23 +171,25 @@ public class Commercial
 	    
 	    public ArrayList<BienImmobilier> getBienImmobiliers() 
 	    {
-	    	
 	    	ArrayList<BienImmobilier> list=new ArrayList<BienImmobilier> ();
 	        try 
 	        { 
-	            java.sql.ResultSet rs=Connexion.getCon().createStatement().executeQuery("select IDBienImmobilier,nomBienImmobilier from BienImmobilier");
-	             
+	            java.sql.ResultSet rs=Connexion.getCon().createStatement().executeQuery("select * from BienImmobilier");
+	            //MyEnum enumVal =  MyEnum.valueOf(rs.getString("EnumColumn"));
 	            
 	            while(rs.next())
 	            {
-	                 list.add(new BienImmobilier(rs.getInt(1)+"", rs.getString(2) +""));  
+	                 list.add(new BienImmobilier(rs.getInt(1), rs.getString(2), rs.getBoolean(3), rs.getString(4)
+	                		 , rs.getString(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getString(9) ,rs.getInt(10)));  
 	            }
 	        
 	        } catch (SQLException ex) {
 	            Logger.getLogger(Commercial.class.getName()).log(Level.SEVERE, null, ex);
 	        }
 	        
+	        //System.out.println("SUCCEEEEEEEEEEEEEEEEEES " + list.size());
 	        return list;
+	       
 		}
 	    
 	    public void setBienImmobilier(ArrayList<BienImmobilier> list)

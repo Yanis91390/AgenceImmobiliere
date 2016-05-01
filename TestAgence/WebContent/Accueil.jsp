@@ -44,7 +44,7 @@
                 
                 
                 
-                <tr> <td><%=commercial.getRendezVous().get(i).getIdRendezVous()%></td>
+                <tr> <td><%=commercial.getRendezVous().get(i).getIdRendezVous()+""%></td>
                     <td><%=commercial.getRendezVous().get(i).getTitre()%></td>
                     <td><%=commercial.getRendezVous().get(i).getContenu()%></td>
                     <td><%=commercial.getRendezVous().get(i).getDateAjout()%></td>
@@ -55,9 +55,9 @@
                         </form>
                     </td>
                         <td>
-                             <form action="Controler/del" >
-                            <input type="hidden" name="n" value="<%=commercial.getRendezVous().get(i).getIdRendezVous()%>" />
-                            <input type="submit" value="Supprimer" />
+                             <form action="Controler/SupprimerRendezVous" method="post">
+                			<input type="text" name="n" value="<%=commercial.getRendezVous().get(i).getIdRendezVous()+""%>" />
+                            <input type="submit" value ="Supprimer" />
                         </form>      
                         </td>
                  </tr>
@@ -70,6 +70,10 @@
             
             </table>
         </div>
-
+        
+        <form action ="ajouterRendezVous.jsp">
+        	<input type="submit" value="Ajouter" />
+        </form>
+			
 		</body>
 </html>

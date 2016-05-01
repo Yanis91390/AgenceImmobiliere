@@ -7,18 +7,18 @@ import java.util.logging.Logger;
 
 public class RendezVous 
 {
-	 private String idRendezVous ;
+	 private int idRendezVous ;
 	 private String  titre;
 	 private String  contenu ;
 	 private String  dateAjout ;
-	 private String  IDCommercial ;
+	 private int  IDCommercial ;
 	 //
 	 private String  IDBienImmobilier ;
 
 	 public RendezVous()
 	 {}
 	 
-	 public RendezVous(String idRendezVous, String titre, String contenu, String dateAjout,String IDBienImmobilier ) 
+	 public RendezVous(int idRendezVous, String titre, String contenu, String dateAjout,String IDBienImmobilier ) 
 	 {
 	        this.idRendezVous = idRendezVous;
 	        this.titre = titre;
@@ -28,7 +28,7 @@ public class RendezVous
 	      
 	    }
 	 
-	 public RendezVous(String idRendezVous, String titre, String contenu, String dateAjout) 
+	 public RendezVous(int idRendezVous, String titre, String contenu, String dateAjout) 
 	 {
 	        this.idRendezVous = idRendezVous;
 	        this.titre = titre;
@@ -36,11 +36,11 @@ public class RendezVous
 	        this.dateAjout = dateAjout;  
 	 }
 
-	    public String getIdRendezVous() {
+	    public int getIdRendezVous() {
 	        return idRendezVous;
 	    }
 
-	    public void setIdRendezVous(String idRendezVous) {
+	    public void setIdRendezVous(int idRendezVous) {
 	        this.idRendezVous = idRendezVous;
 	    }
 
@@ -68,11 +68,11 @@ public class RendezVous
 	        this.dateAjout = dateAjout;
 	    }
 
-	    public String getIDCommercial() {
+	    public int getIDCommercial() {
 	        return IDCommercial;
 	    }
 
-	    public void setIDCommercial(String IDCommercial) {
+	    public void setIDCommercial(int IDCommercial) {
 	        this.IDCommercial = IDCommercial;
 	    }
 	    

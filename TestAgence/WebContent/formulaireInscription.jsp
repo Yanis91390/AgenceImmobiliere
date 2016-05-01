@@ -10,7 +10,7 @@
 	
 	<%@include file="menu.jsp" %>
 
-	<form action = "Controler/InscriptionCommercial" method="post"> 
+	<form action = "Controler/AjouterCommercial" method="post"> 
 		Login:<input type="text" name="login"></br>
 		Mot de passe :<input type="text" name="pass"></br>
 		email:<input type="text" name="email"></br>
