@@ -42,7 +42,7 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td><a href="recuper.jsp">Mot de passe Oublié</a></td>
+                            <td><a href="recuperer.jsp">Mot de passe Oublié</a></td>
                         </tr>
                         <tr>
                             <td></td>

@@ -218,6 +218,22 @@ public class Operation implements BienImmobilierDAO
          System.out.println("Méthode appliqué modifier BienImmo" + bien.getIDBienImmobilier());
      }
      
+     public void modifierCommercial(Commercial commercial) throws SQLException
+ 	{
+    	 PreparedStatement psm=con.prepareStatement("update Commercial set Login=?,Password=?,Email=? ,QuestionSecret=? ,ReponseSecret=? where IDCommercial=?");
+         psm.setString(1, commercial.getLogin());
+         psm.setString(2, commercial.getPassword());
+         psm.setString(3, commercial.getEmail());
+         psm.setString(4, commercial.getQuesSecret());
+         psm.setString(4, commercial.getRepSecret());
+         psm.setInt(5, commercial.getIDCommercial());
+     
+         psm.executeUpdate();
+         
+         System.out.println("HGDFJKHGJFKDHGJKDFHGJKDHGJKDHGKJDHGKJDFHGKJFDHGKJDFHGJKFH" + commercial.getIDCommercial());
+ 		
+ 	}
+     
      public RendezVous getRendezVous(String id)throws SQLException
      {
          RendezVous n=null;
@@ -242,6 +258,21 @@ public class Operation implements BienImmobilierDAO
          {
         	 n=new BienImmobilier(rs.getInt(1), rs.getString(2), rs.getBoolean(3), rs.getString(4)
             		 , rs.getString(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getString(9) ,rs.getInt(10)); 
+         }
+         
+      return n;
+      
+     }
+     
+     public Commercial getCommercial(String id)throws SQLException
+     {
+         Commercial n=null;
+         ResultSet rs=con.createStatement().executeQuery("select * from Commercial where IDCommercial="+id );
+         
+         if(rs.next())
+         {
+        	 n=new Commercial(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)
+            		 , rs.getString(5), rs.getString(6)); 
          }
          
       return n;
@@ -435,6 +466,8 @@ public class Operation implements BienImmobilierDAO
 		}
 		return b;
 	}
+
+	
 
 	
        

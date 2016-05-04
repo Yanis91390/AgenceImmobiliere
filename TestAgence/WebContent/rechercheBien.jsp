@@ -42,7 +42,6 @@
 
 %>
 
-<%@include file="Header.jsp" %>
 
 <html>
 <head>
@@ -50,9 +49,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	
-	<form action="Controler/RechercherBien" method="post">
-        <div style="display: inline-block;margin-left:10%;margin-top: 2%;width: 80%">
+	<%@include file="Header.jsp" %>
+	<form action="Controler/RechercherBien" method="post"><br>
+        
         
             <select name="crit">
             	<option></option>
@@ -101,12 +100,9 @@
                
             </div>                 
 
-     </div>
+    
  
 		
-		<div class="grid-box width100 grid-h">
-		<%@include file="Footer.jsp" %>
-		     </div>
-		     </div>
+	<%@include file="Footer.jsp" %>	
     </body>
 </html>

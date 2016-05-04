@@ -29,8 +29,16 @@
 
 %>
 
+<%@include file="Header.jsp" %>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
 	<table border="1" style="width: 100%">
-                <tr> <th>IDCommercial</th><th>Login</th><th>password</th><th>Email</th><th colspan="2">Operation ?</th></tR>
+                <tr> <th>IDCommercial</th><th>Login</th><th>password</th><th>Email</th><th>Question</th><th>Reponse</th><th colspan="2">Operation ?</th></tR>
             <%
             	for(int i=0;i<admin.getCommercial().size();i++){
              %>
@@ -40,17 +48,19 @@
                 <tr>
              		<td><%=admin.getCommercial().get(i).getIDCommercial() %></td>
              		<td><%=admin.getCommercial().get(i).getLogin() %></td>
+             		<td><%=admin.getCommercial().get(i).getPassword() %></td>
              		<td><%=admin.getCommercial().get(i).getEmail() %></td>
-             		<td><%=admin.getCommercial().get(i).getEmail() %></td>
+             		<td><%=admin.getCommercial().get(i).getQuesSecret()%></td>
+             		<td><%=admin.getCommercial().get(i).getRepSecret()%></td>
                     <td>
                         <form action="modifierCommercial.jsp">
-                            <input type="hidden" name="n" value="" />
+                            <input type="text" name="n" value="<%=admin.getCommercial().get(i).getIDCommercial() %>" />
                             <input type="submit" value="Modifier" />
                         </form>
                     </td>
                         <td>
                              <form action="Controler/del" >
-                            <input type="hidden" name="n" value="" />
+                            <input type="hidden" name="n" value="<%=admin.getCommercial().get(i).getIDCommercial() %>" />
                             <input type="submit" value="Supprimer" />
                         </form>      
                         </td>
@@ -69,3 +79,10 @@
                             <input type="hidden" name="n" value="" />
                             <input type="submit" value="Ajouter" />
                         </form>
+                        
+                        <div class="grid-box width100 grid-h">
+		<%@include file="Footer.jsp" %>
+		     </div>
+		     </div>
+      </body>
+</html>

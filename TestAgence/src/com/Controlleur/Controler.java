@@ -2,8 +2,12 @@ package com.Controlleur;
 
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,14 +47,10 @@ public class Controler extends HttpServlet
 	        {
 	        	chercher(request,response);
 	        	System.out.println("BOUTON OK");
-	        }
-	        
-	    
+	        } 
 	        
 	 }
 	 
-	
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	            throws ServletException, IOException 
 	 {
@@ -98,7 +98,8 @@ public class Controler extends HttpServlet
 	        // A FAAAAAAAAAAAAAAAAAAIREEEEEEEEEEEEEEEEEEEE
 	        if(action.equals("/ModifierCommercial") && method.toLowerCase().equals("post"))
 	        {
-	        	
+	        	modifierCommercial(request,response);
+	        	System.out.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 	        }
 	        
 	        if(action.equals("/AjouterRendezVous") && method.toLowerCase().equals("post"))
@@ -133,6 +134,13 @@ public class Controler extends HttpServlet
 	        {
 	        	gestionLocation(request,response);
 	        	System.out.println("BOUTON OK");
+	        }
+	        
+	        if(action.equals("/getCompte")&& method.toLowerCase().equals("post")){
+	            getCompte(request, response);
+	        }
+	          if(action.equals("/getRep")&& method.toLowerCase().equals("post")){
+	            getRep(request, response);
 	        }
 	        
 	        
@@ -350,6 +358,31 @@ public class Controler extends HttpServlet
 			response.sendRedirect("../formulaireInscription.jsp");
 		}
 		
+	}
+	
+	private void modifierCommercial(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
+		processRequest(request, response);
+		
+		String id = request.getParameter("idcom");
+		String login = request.getParameter("login");
+		String password = request.getParameter("pass");
+		String email = request.getParameter("email");
+		String quest = request.getParameter("quest");
+		String rep = request.getParameter("rep");
+		
+		Commercial commercial = new Commercial(strToInt(id),login,password,email,quest,rep);
+		
+		try
+		{
+			op.modifierCommercial(commercial);
+			response.sendRedirect("../vueCommerciaux.jsp");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			response.sendRedirect("../vueCommerciaux.jsp");
+		}
 	}
 	
 	/*-------------------------- RENDEZ-VOUS ----------------------------------*/
@@ -590,6 +623,64 @@ public class Controler extends HttpServlet
 	        }
 			
 		}
+	 
+	 protected void getCompte(HttpServletRequest request, HttpServletResponse response)
+	         throws ServletException, IOException {
+	        processRequest(request, response);
+	        String log=request.getParameter("log");
+	        String mail=request.getParameter("mail");
+	        Commercial us=new Commercial();
+	      try {
+	          String q=op.getQuestion(log, mail);
+	          us.setLogin(log);
+	          us.setEmail(mail);
+	          us.setQuesSecret(q);
+	          if(!q.equals("")){
+	              
+	              request.getSession().setAttribute("commercial", us);
+	              response.sendRedirect("../reponse.jsp");
+	          }else {
+	              response.sendRedirect("../recuper.jsp");
+	          }
+	      } catch (SQLException ex) {
+	          Logger.getLogger(Controler.class.getName()).log(Level.SEVERE, null, ex);
+	      }
+	      
+	     
+	    }
+	     
+	        
+	        
+	          protected void getRep(HttpServletRequest request, HttpServletResponse response)
+	            throws ServletException, IOException {
+	             processRequest(request, response);
+	              PrintWriter out=response.getWriter();
+	            
+	              Commercial us=(Commercial)request.getSession().getAttribute("commercial");
+	             String rep=request.getParameter("reps");
+	             us.setRepSecret(rep);
+	      try {
+	          String rep1=op.verifierep(us);
+	          if(!rep1.equals("")){
+	           
+	              out.write("<html>"
+	                      + "<head></head>"
+	                      + "<body>"
+	                      + "<p>Votre mot de passe est :"+rep1
+	                      +"<br> <br> <a href=\"http://localhost:8080/TestAgence/Connexion.jsp\"> Retour à la page d'accueil</a>"
+	                      + "</p>"
+	                      + ""
+	                      + "</body></html>");
+	              
+	              
+	          }else {
+	              request.getSession().setAttribute("commercial", us);
+	              response.sendRedirect("../reponse.jsp");
+	          }
+	      } catch (SQLException ex) {
+	          Logger.getLogger(Controler.class.getName()).log(Level.SEVERE, null, ex);
+	      }
+	          }
 	
 	/*----------------------------------AUTRE---------------------------------------------*/
 	public static int strToInt(String s)
