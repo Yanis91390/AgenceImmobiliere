@@ -10,15 +10,12 @@ RendezVous rendezvous = op.getRendezVous(request.getParameter("n"));
 
 
 %>
+<%@include file="Header.jsp" %>
+            
+	<section id="top-b" class="grid-block">
+			<div class="grid-box width100 grid-h">
+				<div class="module mod-box mod-box-default encartAccueil deepest" style="min-height: 0px;">
 
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-		
-		<%@include file="menu.jsp" %>
 
 	<form action = "Controler/ModifierRendezVous" method="post"> 
 		<td><input type="hidden" name="idrdv" value="<%=rendezvous.getIdRendezVous()%>" size="30" /></td>
@@ -28,6 +25,6 @@ RendezVous rendezvous = op.getRendezVous(request.getParameter("n"));
 		Date Ajout : <input type="text" name="dateAjout1"></br>
 		<input type="submit" value="confirmer" name="btnmodifierdv">
 	</form>
+</div></div></section>
 
-</body>
-</html>
+<%@include file="Footer.jsp"%>

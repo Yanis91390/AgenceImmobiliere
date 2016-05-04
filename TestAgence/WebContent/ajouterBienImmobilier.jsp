@@ -8,16 +8,13 @@
 
 
 %>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	
-	<%@include file="menu.jsp" %>
+<%@include file="Header.jsp" %>
+            
+	<section id="top-b" class="grid-block">
+			<div class="grid-box width100 grid-h">
+				<div class="module mod-box mod-box-default encartAccueil deepest" style="min-height: 0px;">
 
-	<form action = "Controler/AjouterBien" method="post"> 
+	<center><form action = "Controler/AjouterBien" method="post"> 
 		TypeBien <input type="text" name="typebien" size="30"></br>
 		Disponible : <input type="text" name="disponible"></br>
 		Statut : <input type="text" name="statutbien"></br>
@@ -28,6 +25,7 @@
 		Adresse : <input type="text" name="adressebien"></br>
 		Superficie : <input type="text" name="superficiebien"></br>
 		<input type="submit" value="confirmer" name="btnajouterbien">
-	</form>
-</body>
-</html>
+	</form></center>
+</div></div></section>
+
+<%@include file="Footer.jsp" %>

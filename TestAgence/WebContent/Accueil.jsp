@@ -1,15 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@page import="com.Model.*"%>
+    <%@page import="java.util.ArrayList"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%
   	Commercial  commercial=(Commercial)request.getSession().getAttribute("commercial");
-	commercial.setIDCommercial(commercial.getIDCommercial());//(commercial.getLogin())+"");
+	commercial.setIDCommercial(commercial.getIDCommercial());
 	commercial.setRendezVous(commercial.getRendezVous(commercial.getLogin()));
-	commercial.setBienImmobilier(commercial.getBienImmobiliers());
+	//commercial.setBienImmobilier(commercial.getBienImmobiliers());
+	
+	ArrayList<RendezVous> n =( ArrayList<RendezVous>)request.getSession().getAttribute("n");
+	//commercial.setRendezVous(n);
+    String err=(String)request.getSession().getAttribute("err");
+    String rep=(String)request.getSession().getAttribute("rep");
+    
+    if(err==null)
+  	{
+      err="";
+  	}
+  
+ if(n==null)
+ {
+     n=new ArrayList<RendezVous>();
+ }
    	
-	String rep=(String)request.getSession().getAttribute("rep");
+	
    
 	if(commercial==null){
        
@@ -26,16 +42,17 @@
 %>
 
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Accueil</title>
-</head>
-		<body>
-		
-		<%@include file="menu.jsp" %>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+
+<%@include file="Header.jsp" %>
+               
             
-			<div style="display: inline-block;margin-left:10%;margin-top: 2%;width: 80%">
-            <%=not%>
+	
+           <div>
             <table border="1" style="width: 100%">
                 <tr> <th>IDRendezVous</th><th>Titre</th><th>Contenu</th><th>DateAjout</th><th colspan="2">Operation ?</th></tR>
             <%
@@ -62,18 +79,28 @@
                         </td>
                  </tr>
              
+             <%} %>
             
-            
-            
-            <%}%>
-            
-            
-            </table>
-        </div>
+            </table><br>
+       		
+			
+
         
         <form action ="ajouterRendezVous.jsp">
         	<input type="submit" value="Ajouter" />
         </form>
 			
-		</body>
+			
+			
+		
+		
+		
+        <div class="grid-box width100 grid-h">
+				<div class="module mod-box mod-box-default encartAccueilInfo deepest" style="min-height: 0px;">
+						<div id="googleMap" style="width:800px;height:400px;"></div>
+				</div>
+			</div></section>
+				<%@include file="Footer.jsp" %>
+		     </div>
+    </body>
 </html>

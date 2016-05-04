@@ -1,6 +1,11 @@
 package com.Model;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BienImmobilier 
 {
@@ -13,6 +18,7 @@ public class BienImmobilier
 	private double prixAchat, loyer, charge;
 	private String adresse;
 	private int superficie ;
+	private String departementBien;
 	
 	private ArrayList<Client> listeClient = new ArrayList<Client>();
 	
@@ -20,6 +26,25 @@ public class BienImmobilier
 	{
 		
 	}
+	
+	/*public Vector trouverBien(String departement, String prixachat, String loyer) throws SQLException{
+
+        Vector v=new Vector();
+        ResultSet rs=con.createStatement().executeQuery("select * from BienImmobilier where Departement='"+departement+"' || Loyer<='"+loyer+"' || PrixAchat<='"+prixachat+"' ");
+        while(rs.next()){
+        BienImmobilier b = new BienImmobilier();
+        b.setIDBienImmobilier(rs.getInt(1));
+        //b.setTypeBien(typeBien);(rs.getString(2));
+        b.setAdresse(rs.getString(4));
+        b.setPrixAchat(rs.getDouble(5));
+        b.setLoyer(rs.getDouble(6));
+        b.setCharge(rs.getDouble(7));
+        b.setDepartementBien(rs.getString(8));
+         v.addElement(b);
+        }
+        return v;
+
+    }*/
 	
 	public BienImmobilier(int idBienImmobilier, TypeBien type,boolean disponible,StatutBien statut,
 			EtatBien etat,double prix,double loyer,double charge,String adresse,int superficie )
@@ -55,14 +80,10 @@ public class BienImmobilier
 		this.setCharge(charge);
 		this.setAdresse(adresse);
 		this.setSuperficie(superficie);
-		this.listeClient = getClients();
+		//this.listeClient = getClients();
 		
 	}
-	private ArrayList<Client> getClients() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	/*55555555555555555555555555555555555555555555555555*/
 	public BienImmobilier(int idBienImmobilier, String type,boolean disponible,String statut,
 			String etat,double prix,double loyer,double charge,String adresse,int superficie )
@@ -96,6 +117,45 @@ public class BienImmobilier
 		this.setAdresse(adresse);
 		this.setSuperficie(superficie);
 	}*/
+	
+	public ArrayList<Client> getClients(String idbien) 
+	{
+		
+		ArrayList<Client> list=new ArrayList<Client> ();
+        try 
+        { 
+            java.sql.ResultSet rs=Connexion.getCon().createStatement().executeQuery("select * from Client c ,BienImmobilier b "
+				+ "where  c.CriterePrixMin <= b.PrixBien AND c.CriterePrixMax >= b.PrixBien "
+				+ "AND IDBienImmobilier="+idbien);
+             
+            
+            while(rs.next())
+            {
+                 list.add(new Client (rs.getInt(1),rs.getString(2),rs.getString(3),rs.getDouble(4),
+     					rs.getDouble(5),rs.getDouble(6),rs.getDouble(7),rs.getDouble(8),rs.getDouble(9)));  
+                 
+            }
+        
+        } catch (SQLException ex) 
+        {
+            Logger.getLogger(Commercial.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+       
+        System.out.println("Clients correspondant " + list.size());
+        return list;
+	}
+	
+	public ArrayList<Client> getClients() 
+	{
+		return listeClient;
+	}
+	
+	public void setClients(ArrayList<Client> liste) 
+	{
+        this.listeClient = liste;
+    }
+	
 	
 	public int getIDBienImmobilier()
 	{
@@ -177,6 +237,14 @@ public class BienImmobilier
 
 	public void setSuperficie(int superficie) {
 		this.superficie = superficie;
+	}
+
+	public String getDepartementBien() {
+		return departementBien;
+	}
+
+	public void setDepartementBien(String departementBien) {
+		this.departementBien = departementBien;
 	}
 	
 

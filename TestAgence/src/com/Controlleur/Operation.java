@@ -3,7 +3,6 @@ package com.Controlleur;
 
 import com.Model.*;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,8 +32,38 @@ public class Operation implements BienImmobilierDAO
 	/*Verifie si un Commercial existe dans la base de donnée*/
 	public boolean  isExiste(Commercial commercial) throws SQLException
     {   
-		ResultSet rs=con.createStatement().executeQuery("select *from Commercial where login='"+commercial.getLogin()+"' and password='"+commercial.getPassword()+"'");      
-        return rs.next();
+		ResultSet rss = null;
+		//ResultSet rs=con.createStatement().executeQuery("select * from Commercial where login='"+commercial.getLogin()+"' and password='"+commercial.getPassword()+"'");
+		//try
+		//{
+			rss=con.createStatement().executeQuery("select * from Commercial where login='"+commercial.getLogin()+"' and password='"+commercial.getPassword()+"'");
+		//}
+		
+		//catch(SQLException ex)
+		//{
+			//ex.printStackTrace();
+		//}
+		
+		
+		/*finally
+		{
+			System.out.println("On entre dans le finally");
+			if(con !=null)
+			try 
+			{	
+				
+				Connexion.getCon().close();
+				System.out.println("Connexion fermé Operation isExiste " );
+			} 
+			catch (SQLException e) 
+			{		
+				e.printStackTrace();
+			}*/
+			
+			return rss.next();
+		//}
+	
+        
     }
      
 	/*Verifie si un Login existe*/
@@ -219,10 +248,40 @@ public class Operation implements BienImmobilierDAO
       
      }
 
-	public void genererListeClient() throws SQLException
+	public Client genererListeClient(String idbien) throws SQLException
 	{
+		Client c = null;
+		ResultSet rs = con.createStatement().executeQuery("select * from Client c ,BienImmobilier b "
+				+ "where  c.CriterePrixMin <= b.PrixBien AND c.CriterePrixMax >= b.PrixBien "
+				+ "AND IDBienImmobilier="+idbien);
+		
+		if(rs.next())
+		{
+			c = new Client (rs.getInt(1),rs.getString(2),rs.getString(3),rs.getDouble(4),
+					rs.getDouble(5),rs.getDouble(6),rs.getDouble(7),rs.getDouble(8),rs.getDouble(9));
+		}
 		
 		
+		
+		return c;
+	}
+	
+	public ArrayList<Client> genererListeClients(String idbien) throws SQLException
+	{
+		ArrayList<Client> list=new ArrayList<Client> ();
+		ResultSet rs = con.createStatement().executeQuery("select * from Client c ,BienImmobilier b "
+				+ "where  c.CriterePrixMin <= b.PrixBien AND c.CriterePrixMax >= b.PrixBien "
+				+ "AND IDBienImmobilier="+idbien);
+		
+		if(rs.next())
+		{
+			list.add(new Client (rs.getInt(1),rs.getString(2),rs.getString(3),rs.getDouble(4),
+ 					rs.getDouble(5),rs.getDouble(6),rs.getDouble(7),rs.getDouble(8),rs.getDouble(9))); 
+		}
+		
+		
+		
+		return list ;
 	}
 
 	
@@ -260,6 +319,121 @@ public class Operation implements BienImmobilierDAO
 				b.getEtatBien().toString(),b.getPrixAchat(),b.getLoyer(),b.getCharge(),
 				b.getAdresse(),b.getSuperficie());
 		
+	}
+	
+	public ArrayList<RendezVous> chercherRendezVousTitre(String crit) throws SQLException
+	  {
+	      ArrayList<RendezVous> n=new ArrayList<RendezVous>();
+	      
+	       ResultSet rs=con.createStatement().executeQuery("select IDRendezVous,titre,contenu,dateAjout from RendezVous where upper(titre) like upper('"+crit+"%')" );
+	       while(rs.next()){
+	           
+	           n.add(new RendezVous(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getObject(4)+""));
+	       }
+	      
+	      
+	      return n;
+	  }
+
+	
+	 public  ArrayList<RendezVous> chercherRendezVousDate(String date) throws SQLException
+	  {
+	     ArrayList<RendezVous> n=new ArrayList<RendezVous>();
+	      
+	       ResultSet rs=con.createStatement().executeQuery("select IDRendezVous,titre,contenu,dateAjout from RendezVous where dateAjout ='"+date+"'  " );
+	       while(rs.next()){
+	           
+	           n.add(new RendezVous(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getObject(4)+""));
+	       }
+	      
+	      
+	      return n;
+	      
+	  }
+	 
+	 public  ArrayList<RendezVous> chercherRendezVousContenu(String contenu) throws SQLException
+	  {
+	     ArrayList<RendezVous> n=new ArrayList<RendezVous>();
+	      
+	       ResultSet rs=con.createStatement().executeQuery("select IDRendezVous,titre,contenu,dateAjout from RendezVous where upper(contenu) like upper('"+contenu+"%')" );
+	       while(rs.next()){
+	           
+	           n.add(new RendezVous(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getObject(4)+""));
+	       }
+	      
+	      
+	      return n;
+	      
+	  }
+
+	public ArrayList<BienImmobilier> chercherBienID(String id) throws SQLException
+	{
+		ArrayList<BienImmobilier> b = new ArrayList<BienImmobilier>();
+		
+		ResultSet rs =con.createStatement().executeQuery("select * from BienImmobilier where IDBienImmobilier ='"+id+"'  " );
+		while(rs.next())
+		{
+			b.add(new BienImmobilier(rs.getInt(1), rs.getString(2), rs.getBoolean(3), rs.getString(4)
+           		 , rs.getString(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getString(9) 
+           		 ,rs.getInt(10)));
+		}
+		return b;
+	}
+
+	public ArrayList<BienImmobilier> chercherBienDisponible(String dispo) throws SQLException
+	{
+		ArrayList<BienImmobilier> b = new ArrayList<BienImmobilier>();
+		
+		ResultSet rs =con.createStatement().executeQuery("select * from BienImmobilier where DisponibleBien ='"+dispo+"'  " );
+		while(rs.next())
+		{
+			b.add(new BienImmobilier(rs.getInt(1), rs.getString(2), rs.getBoolean(3), rs.getString(4)
+	           		 , rs.getString(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getString(9) 
+	           		 ,rs.getInt(10)));
+		}
+		return b;
+	}
+
+	public ArrayList<BienImmobilier> chercherBienStatut(String statut) throws SQLException
+	{
+		ArrayList<BienImmobilier> b = new ArrayList<BienImmobilier>();
+		
+		ResultSet rs =con.createStatement().executeQuery("select * from BienImmobilier where StatutBien ='"+statut+"'  " );
+		while(rs.next())
+		{
+			b.add(new BienImmobilier(rs.getInt(1), rs.getString(2), rs.getBoolean(3), rs.getString(4)
+	           		 , rs.getString(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getString(9) 
+	           		 ,rs.getInt(10)));
+		}
+		return b;
+	}
+	
+	public ArrayList<BienImmobilier> chercherBienEtat(String etat) throws SQLException
+	{
+		ArrayList<BienImmobilier> b = new ArrayList<BienImmobilier>();
+		
+		ResultSet rs =con.createStatement().executeQuery("select * from BienImmobilier where EtatBien ='"+etat+"'  " );
+		while(rs.next())
+		{
+			b.add(new BienImmobilier(rs.getInt(1), rs.getString(2), rs.getBoolean(3), rs.getString(4)
+	           		 , rs.getString(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getString(9) 
+	           		 ,rs.getInt(10)));
+		}
+		return b;
+	}
+
+	public ArrayList<BienImmobilier> chercherBienPrixmax(String rech) throws SQLException
+	{
+		ArrayList<BienImmobilier> b = new ArrayList<BienImmobilier>();
+		
+		ResultSet rs =con.createStatement().executeQuery("Select * from BienImmobilier where PrixBien <"+rech+"");
+		while(rs.next())
+		{
+			b.add(new BienImmobilier(rs.getInt(1), rs.getString(2), rs.getBoolean(3), rs.getString(4)
+	           		 , rs.getString(5), rs.getDouble(6), rs.getDouble(7), rs.getDouble(8), rs.getString(9) 
+	           		 ,rs.getInt(10)));;
+		}
+		return b;
 	}
 
 	

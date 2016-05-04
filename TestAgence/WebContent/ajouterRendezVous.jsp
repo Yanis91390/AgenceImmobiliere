@@ -12,14 +12,11 @@
 
 %>
 
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	
-	<%@include file="menu.jsp" %>
+<%@include file="Header.jsp" %>
+            
+	<section id="top-b" class="grid-block">
+			<div class="grid-box width100 grid-h">
+				<div class="module mod-box mod-box-default encartAccueil deepest" style="min-height: 0px;">
 
 	<form action = "Controler/AjouterRendezVous" method="post"> 
 		titre <input type="text" name="titre" size="30"></br>
@@ -28,5 +25,5 @@
 		<input type="submit" value="confirmer" name="btnajouterrdv">
 	</form>
 
-</body>
-</html>
+</div></div></section>
+<%@include file="Footer.jsp"%>

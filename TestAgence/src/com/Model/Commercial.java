@@ -1,7 +1,10 @@
 package com.Model;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,18 +17,21 @@ public class Commercial
 		private String email  =""  ;
 		private String QuesSecret  ="";
 		private String RepSecret  ="" ;
-		private ArrayList<BienImmobilier> liste_bienImmobilier = new ArrayList<BienImmobilier>();
+		private ArrayList<BienImmobilier> liste_bienImmobilier ;
 		private ArrayList<RendezVous> liste_rendezVous = new ArrayList<RendezVous>();
 		private int nbRendezVous;
 		private int nbrNote=0;
 
+		//Connection con = Connexion.getCon();
+
 	    public Commercial() 
 	    {
-	    	this.liste_bienImmobilier=getBienImmobiliers();
+	    	//this.liste_bienImmobilier=getBienImmobiliers();
 		}
 	    
-
-	    public Commercial(String Login, String password, String email, String QuesSecret, String RepSecret) {
+	    
+	    public Commercial(String Login, String password, String email, String QuesSecret, String RepSecret) 
+	    {
 	        //this.IDCommercial=getIDCommercial(Login); //+"";
 	        this.Login = Login;
 	        this.password = password;
@@ -38,19 +44,21 @@ public class Commercial
 	        //nbrNote=getNbrNote(Login);
 	    }
 
-		public Commercial(int IDCommercial,String Login, String password, String email, String QuesSecret, String RepSecret)  {
+		public Commercial(int IDCommercial,String Login, String password, String email, String QuesSecret, String RepSecret)  
+		{
 	        this.IDCommercial=IDCommercial;
 	        this.Login = Login;
 	        this.password = password;
 	        this.email = email;
 	        this.QuesSecret = QuesSecret;
 	        this.RepSecret = RepSecret;
-	        this.liste_rendezVous=getRendezVous(Login);
-	        this.liste_bienImmobilier=getBienImmobiliers();
+	        
+	        //this.liste_rendezVous=getRendezVous(Login);
+	        //this.liste_bienImmobilier=getBienImmobiliers();
 	        //nbrNote= getNbrNote(Login);
 	    }
 
-	    public Commercial(String IdCommercial, String Login, String password, String email, String QuesSecret, String RepSecret) 
+	   /* public Commercial(String IdCommercial, String Login, String password, String email, String QuesSecret, String RepSecret) 
 	    {
 	    	//this.IdCommercial
 	    	this.Login = Login;
@@ -62,7 +70,7 @@ public class Commercial
 	        this.liste_bienImmobilier=getBienImmobiliers();
 	        //this.n=getNote(Login);
 	        //nbrNote=getNbrNote(Login);
-		}
+		}*/
 
 
 	
@@ -125,6 +133,24 @@ public class Commercial
 	        this.liste_rendezVous = liste;
 	    }
 	    
+	    /*public Vector rechercher(String id) throws SQLException{
+
+	        Vector v=new Vector();
+	        ResultSet rs=con.createStatement().executeQuery("select * from Commercial where Login='"+id+"' ");
+	        while(rs.next()){
+	        Commercial c=new Commercial();
+	        c.setIDCommercial(rs.getInt(1));
+	        c.setLogin(rs.getString(2));
+	        c.setPassword(rs.getString(3));
+	        c.setEmail(rs.getString(4));
+	        c.setQuesSecret(rs.getString(5));
+	        c.setRepSecret(rs.getString(6));
+	         v.addElement(c);
+	        }
+	        return v;
+
+	    }*/
+	    
 	    public int getIDCommercial(String login )
 	    {
 	        int nb=0;
@@ -165,6 +191,18 @@ public class Commercial
 	            Logger.getLogger(Commercial.class.getName()).log(Level.SEVERE, null, ex);
 	        }
 	        
+	        /*finally
+			{
+				 if(Connexion.getCon() != null)
+					try {
+						Connexion.getCon().close();
+						System.out.println("Connexion fermé commercial rendez vous" );
+					} catch (SQLException e) {
+						
+						e.printStackTrace();
+					}
+			}*/
+	        System.out.println("Taille liste rdv " + list.size());
 	        return list;
 	        
 	    }
@@ -187,7 +225,20 @@ public class Commercial
 	            Logger.getLogger(Commercial.class.getName()).log(Level.SEVERE, null, ex);
 	        }
 	        
+	        /*finally
+			{
+				 if(Connexion.getCon() != null)
+					try {
+						Connexion.getCon().close();
+						System.out.println("Connexion fermé commercial bien " );
+					} catch (SQLException e) {
+						
+						e.printStackTrace();
+					}
+			}*/
+	        
 	        //System.out.println("SUCCEEEEEEEEEEEEEEEEEES " + list.size());
+	        System.out.println("Taille liste Bien Immobilier " + list.size());
 	        return list;
 	       
 		}

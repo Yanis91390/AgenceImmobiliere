@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.Model.*;
 
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -44,9 +45,13 @@ public class Controler extends HttpServlet
 	        	System.out.println("BOUTON OK");
 	        }
 	        
+	    
+	        
 	 }
 	 
-	 protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	            throws ServletException, IOException 
 	 {
 		 	processRequest(request, response);
@@ -63,7 +68,7 @@ public class Controler extends HttpServlet
 	        {
 	        	ajouterBienImmobilier(request, response);
 	        }
-	        //----------------------------A FAIRE
+	        
 	        if(action.equals("/SupprimerBien") && method.toLowerCase().equals("post"))
 	        {
 	        	supprimerBienImmobilier(request, response);
@@ -116,6 +121,21 @@ public class Controler extends HttpServlet
 				}
 	        }
 	        
+	        if(action.equals("/RechercherRendezVous")&& method.toLowerCase().equals("post")){
+	            rechercherRendezVous(request, response);
+	        }
+	        
+	        if(action.equals("/RechercherBien")&& method.toLowerCase().equals("post")){
+	            rechercherBien(request, response);
+	        }
+	        
+	        if(action.equals("/GestionLocation") && method.toLowerCase().equals("get"))
+	        {
+	        	gestionLocation(request,response);
+	        	System.out.println("BOUTON OK");
+	        }
+	        
+	        
 	        		 
 	  }
 
@@ -130,15 +150,20 @@ public class Controler extends HttpServlet
         commercial =new Commercial();
         commercial.setLogin(login);
         commercial.setPassword(pass);
-        Administrateur administrateur = new Administrateur();
-        administrateur.setCommercial(administrateur.getCommercial());
+       
+        //administrateur.setCommercial(administrateur.getCommercial());
+       //Administrateur administrateur1 = new Administrateur(administrateur1.getCommercial());
+		
         
         try{
             if(op.isExiste(commercial)){
                
+            	Administrateur administrateur = new Administrateur();
+                System.out.println("A la connexion : " + administrateur.getCommercial().size());
                 request.getSession().setAttribute("commercial", commercial);
-                
                 request.getSession().setAttribute("administrateur", administrateur);
+                //request.getSession().setAttribute("n", null);
+                
                 
                 request.getSession().setAttribute("rep", null);
                 //session2.setAttribute(arg0, arg1);
@@ -149,7 +174,7 @@ public class Controler extends HttpServlet
             }else{
                  
             	 response.sendRedirect("../Connexion.jsp");
-                 request.getSession().setAttribute("commercial", commercial);
+                 //request.getSession().setAttribute("commercial", commercial);
                  request.getSession().setAttribute("rep", "Utilisateur ou mot de pass incorect");
                  
             }
@@ -259,18 +284,32 @@ public class Controler extends HttpServlet
 	private void supprimerBienImmobilier(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException  
 	{
+		try {
+			
+			BienImmobilier bien = op.getBienImmobiliers(request.getParameter("n"));
+			op.deleteBienImmobilier(bien);
+			response.sendRedirect("../vueBienImmobilier.jsp");
 		
+		} catch (SQLException e) {
+			
+			response.sendRedirect("../vueBienImmobilier.jsp");
+			e.printStackTrace();
+		}
 		
 	}
 	
-	private void genererListeClient(HttpServletRequest request, HttpServletResponse response) {
+	private void genererListeClient(HttpServletRequest request, HttpServletResponse response) throws IOException 
+	{
 		
 		try
 		{
-			op.genererListeClient();
+			op.genererListeClient(request.getParameter("idbien"));
+			System.out.println("Passage dans le try !!" + "");
+			response.sendRedirect("../vueClientGenere.jsp");
 		}
+				
 		
-		catch(SQLException ex)
+		catch(Exception ex)
 		{
 			
 		}
@@ -404,6 +443,153 @@ public class Controler extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+	
+	private void rechercherRendezVous(HttpServletRequest request, HttpServletResponse response) 
+			throws IOException 
+	{
+		request.getSession().setAttribute("err", "");
+        request.getSession().setAttribute("n", null);
+       
+        String crit=request.getParameter("crit");
+        String rech=request.getParameter("rech");
+       
+       
+        try 
+        {
+    	   if(crit.equals("titre"))
+    	   {
+                ArrayList<RendezVous> n= op.chercherRendezVousTitre(rech);
+                request.getSession().setAttribute("err", n.size()+"");
+                request.getSession().setAttribute("n", n);
+                //response.sendRedirect("../rech.jsp");
+                response.sendRedirect("../rechercheRendezVous.jsp");
+    	   }
+    	   else if(crit.equals("date"))
+    	   {
+              
+                ArrayList<RendezVous> n=op.chercherRendezVousDate(rech);
+                request.getSession().setAttribute("n", n);
+                response.sendRedirect("../rechercheRendezVous.jsp");
+           
+    	   }
+    	   else if(crit.equals("contenu"))
+    	   {
+              
+                ArrayList<RendezVous> n=op.chercherRendezVousContenu(rech);
+                request.getSession().setAttribute("n", n);
+                response.sendRedirect("../rechercheRendezVous.jsp");
+           
+    	   }
+       
+    	   else 
+    	   {
+    		   request.getSession().setAttribute("err", "Veuillez choisir un crit");
+    		   //response.sendRedirect("../rech.jsp");
+    		   response.sendRedirect("../rechercheRendezVous.jsp");
+    	   }
+         
+       } 
+       catch (SQLException ex) 
+       {
+            request.getSession().setAttribute("err",ex.getMessage());
+            //response.sendRedirect("../rech.jsp");
+            response.sendRedirect("../rechercheRendezVous.jsp");
+       }
+		
+	}
+	
+	private void rechercherBien(HttpServletRequest request, HttpServletResponse response) throws IOException
+    {
+		request.getSession().setAttribute("err", "");
+        request.getSession().setAttribute("n", null);
+       
+        String crit=request.getParameter("crit");
+        String rech=request.getParameter("rech");
+       
+       
+        try 
+        {
+    	   if(crit.equals("id"))
+    	   {
+                ArrayList<BienImmobilier> n= op.chercherBienID(rech);
+                request.getSession().setAttribute("err", n.size()+"");
+                request.getSession().setAttribute("n", n);
+                //response.sendRedirect("../rech.jsp");
+                response.sendRedirect("../rechercheBien.jsp");
+    	   }
+    	   else if(crit.equals("disponible"))
+    	   {
+              
+                ArrayList<BienImmobilier> n=op.chercherBienDisponible(rech);
+                request.getSession().setAttribute("n", n);
+                response.sendRedirect("../rechercheBien.jsp"); 
+           
+    	   }
+    	   else if(crit.equals("statut"))
+    	   {
+              
+                ArrayList<BienImmobilier> n=op.chercherBienStatut(rech);
+                request.getSession().setAttribute("n", n);
+                response.sendRedirect("../rechercheBien.jsp");
+           
+    	   }
+    	   
+    	   else if(crit.equals("etat"))
+    	   {
+              
+                ArrayList<BienImmobilier> n=op.chercherBienEtat(rech);
+                request.getSession().setAttribute("n", n);
+                response.sendRedirect("../rechercheBien.jsp");
+           
+    	   }
+    	   
+    	   else if(crit.equals("prixmax"))
+    	   {
+              
+                ArrayList<BienImmobilier> n=op.chercherBienPrixmax(rech);
+                request.getSession().setAttribute("n", n);
+                response.sendRedirect("../rechercheBien.jsp");
+           
+    	   }
+       
+    	   else 
+    	   {
+    		   request.getSession().setAttribute("err", "Veuillez choisir un crit");
+    		   //response.sendRedirect("../rech.jsp");
+    		   response.sendRedirect("../rechercheBien.jsp");
+    	   }
+         
+       } 
+       catch (SQLException ex) 
+       {
+            request.getSession().setAttribute("err",ex.getMessage());
+            //response.sendRedirect("../rech.jsp");
+            response.sendRedirect("../rechercheBien.jsp");
+       }
+		
+		
+	}
+	
+	 private void gestionLocation(HttpServletRequest request, HttpServletResponse response) 
+			 throws IOException 
+	 {
+		 	request.getSession().setAttribute("err", "");
+	        request.getSession().setAttribute("n", null);
+	       
+	        String rech=request.getParameter("rech");
+	        
+	        try
+	        {
+	        	ArrayList<BienImmobilier> n=op.chercherBienDisponible(rech);
+	        	request.getSession().setAttribute("n", n);
+	        	response.sendRedirect("../vuGestionLocation.jsp"); 
+	        }
+	        catch(SQLException e)
+	        {
+	        	e.printStackTrace();
+	        }
+			
+		}
 	
 	/*----------------------------------AUTRE---------------------------------------------*/
 	public static int strToInt(String s)

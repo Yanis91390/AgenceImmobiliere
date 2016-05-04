@@ -12,8 +12,8 @@
 				 <!--  -->
                  <li ><a href="Accueil.jsp">Accueil</a></li>
                  <li><a href="vueCommerciaux.jsp">Administration</a></li>
-                 <l><a href="vueBienImmobilier.jsp">Catalogue</a></li>
-                 <li><a href="vueRendezVous.jsp">Rendez-Vous</a></li>
+                 <li><a href="vueBienImmobilier.jsp">Catalogue</a></li>
+                 <li><a href="Accueil.jsp">Rendez-Vous</a></li>
                  <li><a href="vueAchatLocation.jsp">Acheter/Louer</a></li>
                  <li><a href="vueGestionLocation.jsp">Gestions Locations</a></li>
             </ol>

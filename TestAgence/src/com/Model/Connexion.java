@@ -10,9 +10,11 @@ public class Connexion {
     public static Connection getCon(){
         
           Connection con =null;
+          int nbCon = 0;
         try {
           
-            
+            nbCon ++;
+            System.out.println("Nombre Connexion : " + nbCon+" ");
             Class.forName("com.mysql.jdbc.Driver");
             con= DriverManager.getConnection("jdbc:mysql://localhost:3306/Test","root","010375");
           

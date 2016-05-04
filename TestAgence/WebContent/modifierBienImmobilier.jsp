@@ -7,19 +7,14 @@
 <%
 	Operation op = new Operation();
 	BienImmobilier bien = op.getBienImmobiliers(request.getParameter("idbien"));
-
-
-
+	
 
 %>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-</head>
-<body>
-	
-	<%@include file="menu.jsp" %>
+<%@include file="Header.jsp" %>
+            
+	<section id="top-b" class="grid-block">
+			<div class="grid-box width100 grid-h">
+				<div class="module mod-box mod-box-default encartAccueil deepest" style="min-height: 0px;">
 
 	<form action = "Controler/ModifierBien" method="post"> 
 		<td><input type="hidden" name="idbien" value="<%=bien.getIDBienImmobilier()%>" size="30" /></td>
@@ -35,5 +30,5 @@
 		Superficie : <input type="text" name="superficie" value="<%=bien.getSuperficie()+""%>"></br>
 		<input type="submit" value="confirmer" name="btnmodifiebien">
 	</form>
-</body>
-</html>
+</div></div></section>
+<%@include file="Footer.jsp"%>
